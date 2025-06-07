@@ -1,3 +1,5 @@
+import math
+
 import pygame as pg
 
 CELL_SIZE = 40
@@ -22,6 +24,20 @@ def draw_numbers(surf):
             surf.blit(font_surface, font_rect)
     return surf
 
+def draw_selection(surf):
+    pos = pg.mouse.get_pos()
+    pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
+    pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
+
+    shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*9), pg.SRCALPHA)
+    pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
+    surf.blit(shape_surf, (CELL_SIZE*pos1, 0))
+
+    shape_surf = pg.Surface((CELL_SIZE*9, CELL_SIZE), pg.SRCALPHA)
+    pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
+    surf.blit(shape_surf, (0, CELL_SIZE*pos2))
+
+
 pg.init()
 
 screen = pg.display.set_mode((1280*1.5,720*1.5))
@@ -31,9 +47,15 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+        if event.type == pg.KEYDOWN:
+            if 1 <= int(event.unicode) <= 9:
+                print(event.unicode)
+                pos = pg.mouse.get_pos()
+
     screen.fill("white")
     surf1 = draw_visual_board()
     draw_numbers(surf1)
+    draw_selection(surf1)
     screen.blit(surf1, (50, 50))
     pg.display.flip()
 
