@@ -29,6 +29,8 @@ def draw_selection(surf):
     pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
     pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
 
+    if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+        return
     shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*9), pg.SRCALPHA)
     pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
     surf.blit(shape_surf, (CELL_SIZE*pos1, 0))
