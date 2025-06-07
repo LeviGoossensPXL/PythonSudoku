@@ -1,14 +1,16 @@
 import pygame as pg
 
+CELL_SIZE = 40
+
 def draw_visual_board():
-    surface = pg.Surface(((40*9)+3, (40*9)+3))
+    surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
     surface.fill("white")
     for i in range(10):
         width = 1
         if i % 3 == 0:
             width = 3
-        pg.draw.line(surface, "black", (0, (40*i)+1.5), ((40*9)+2, (40*i)+1.5), width)
-        pg.draw.line(surface, "black", ((40*i)+1.5, 0), ((40*i)+1.5, (40*9)+2), width)
+        pg.draw.line(surface, "black", (0, (CELL_SIZE * i) + 1.5), ((CELL_SIZE * 9) + 2, (CELL_SIZE * i) + 1.5), width)
+        pg.draw.line(surface, "black", ((CELL_SIZE * i) + 1.5, 0), ((CELL_SIZE * i) + 1.5, (CELL_SIZE * 9) + 2), width)
     return surface
 
 def draw_numbers(surf):
@@ -16,7 +18,7 @@ def draw_numbers(surf):
     for i in range(9):
         for j in range(9):
             font_surface = font.render("9", True, "black")
-            font_rect = font_surface.get_rect(center=((40*i)+20, (40*j)+20))
+            font_rect = font_surface.get_rect(center=((CELL_SIZE * i) + (CELL_SIZE / 2), (CELL_SIZE * j) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
     return surf
 
