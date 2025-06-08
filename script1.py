@@ -38,12 +38,18 @@ def get_board_block(x, y):
             block_list.append(board[x1][y1])
     return block_list
 
-def func1(x, y):
+def is_cell_correct(x, y):
     unit = board[x][y]
-    print(get_board_row(0))
-    print(get_board_col(0))
-    print(get_board_block(0, 0))
-    pass
+    if get_board_block(x, y).count(unit) > 1:
+        print("fout block")
+        return False
+    if get_board_row(x).count(unit) > 1:
+        print("fout row")
+        return False
+    if get_board_col(y).count(unit) > 1:
+        print("fout col")
+        return False
+    return True
 
 def draw_visual_board():
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
@@ -61,7 +67,7 @@ def draw_numbers(surf):
     print("XX")
     for i in range(9):
         for j in range(9):
-            func1(i,j)
+            is_cell_correct(i,j)
             font_surface = font.render(str(board[i][j]), True, "black")
             font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
