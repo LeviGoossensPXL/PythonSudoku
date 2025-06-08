@@ -60,6 +60,9 @@ class Board:
 
     def is_cell_correct(self, x, y):
         unit = self.b[x][y]
+        if unit == 0:
+            print("cell is zero (empty)")
+            return False
         if self.get_board_block(x, y).count(unit) > 1:
             print("fout block")
             return False
