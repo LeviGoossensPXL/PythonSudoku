@@ -91,50 +91,53 @@ class VisualBoard:
     def __init__(self, logic_board: LogicBoard):
         self.lb = logic_board
 
-def draw_visual_board():
-    """function for drawing visual lines of the board"""
-    surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
-    surface.fill("white")
-    for i in range(10):
-        width = 1
-        if i % 3 == 0:
-            width = 3
-        pg.draw.line(surface, "black", (0, (CELL_SIZE * i) + 1.5), ((CELL_SIZE * 9) + 2, (CELL_SIZE * i) + 1.5), width)
-        pg.draw.line(surface, "black", ((CELL_SIZE * i) + 1.5, 0), ((CELL_SIZE * i) + 1.5, (CELL_SIZE * 9) + 2), width)
-    return surface
+    def draw_visual_board(self):
+        """function for drawing visual lines of the board"""
+        surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
+        surface.fill("white")
+        for i in range(10):
+            width = 1
+            if i % 3 == 0:
+                width = 3
+            pg.draw.line(surface, "black", (0, (CELL_SIZE * i) + 1.5), ((CELL_SIZE * 9) + 2, (CELL_SIZE * i) + 1.5),
+                         width)
+            pg.draw.line(surface, "black", ((CELL_SIZE * i) + 1.5, 0), ((CELL_SIZE * i) + 1.5, (CELL_SIZE * 9) + 2),
+                         width)
+        return surface
 
-def draw_numbers(surf):
-    """function for drawing the numbers on the board"""
-    font = pg.font.SysFont("ubuntu", 40)
-    print("XX")
-    for i in range(9):
-        for j in range(9):
-            color = "black"
-            if not lb.is_cell_correct(i,j): #TODO: mark only new cell if wrong
-                color = "red"
-            if board3x3_solved[i][j] == 0:
-                continue
-            font_surface = font.render(str(board3x3_solved[i][j]), True, color)
-            font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
-            surf.blit(font_surface, font_rect)
-    print("XX")
-    return surf
+    def draw_numbers(self, surf):
+        """function for drawing the numbers on the board"""
+        font = pg.font.SysFont("ubuntu", 40)
+        print("XX")
+        for i in range(9):
+            for j in range(9):
+                color = "black"
+                if not self.lb.is_cell_correct(i, j):  # TODO: mark only new cell if wrong
+                    color = "red"
+                if board3x3_solved[i][j] == 0:
+                    continue
+                font_surface = font.render(str(self.lb.b[i][j]), True, color)
+                font_rect = font_surface.get_rect(
+                    center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
+                surf.blit(font_surface, font_rect)
+        print("XX")
+        return surf
 
-def draw_selection(surf):
-    """function for drawing the selected row and column"""
-    pos = pg.mouse.get_pos()
-    pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
-    pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
+    def draw_selection(self, surf):
+        """function for drawing the selected row and column"""
+        pos = pg.mouse.get_pos()
+        pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
+        pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
 
-    if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
-        return
-    shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*9), pg.SRCALPHA)
-    pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
-    surf.blit(shape_surf, (CELL_SIZE*pos1, 0))
+        if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+            return
+        shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*9), pg.SRCALPHA)
+        pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
+        surf.blit(shape_surf, (CELL_SIZE*pos1, 0))
 
-    shape_surf = pg.Surface((CELL_SIZE*9, CELL_SIZE), pg.SRCALPHA)
-    pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
-    surf.blit(shape_surf, (0, CELL_SIZE*pos2))
+        shape_surf = pg.Surface((CELL_SIZE*9, CELL_SIZE), pg.SRCALPHA)
+        pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
+        surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
 
 
@@ -167,9 +170,9 @@ while running:
                 pass
 
     screen.fill("white")
-    surf1 = draw_visual_board()
-    draw_numbers(surf1)
-    draw_selection(surf1)
+    surf1 = vb.draw_visual_board()
+    vb.draw_numbers(surf1)
+    vb.draw_selection(surf1)
 
 
 
