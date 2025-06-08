@@ -36,36 +36,40 @@ board3x3_unsolved = [[0, 8, 2, 4, 3, 5, 1, 7, 9],  # < x // 0
                      #// //
                      #0  1
 
-def get_board_row(x):
-    return board3x3_solved[x]
+class Board:
+    def __init__(self, board: list[list[int]]):
+        self.b = board
 
-def get_board_col(y):
-    col_list = []
-    for row in board3x3_solved:
-        col_list.append(row[y])
-    return col_list
+    def get_board_row(self, x):
+        return self.b[x]
 
-def get_board_block(x, y):
-    block_list = []
-    x = math.floor(x/3)
-    y = math.floor(y/3)
-    for x1 in range(x*3, (x+1)*3):
-        for y1 in range(y*3, (y+1)*3):
-            block_list.append(board3x3_solved[x1][y1])
-    return block_list
+    def get_board_col(self, y):
+        col_list = []
+        for row in self.b:
+            col_list.append(row[y])
+        return col_list
 
-def is_cell_correct(x, y):
-    unit = board3x3_solved[x][y]
-    if get_board_block(x, y).count(unit) > 1:
-        print("fout block")
-        return False
-    if get_board_row(x).count(unit) > 1:
-        print("fout row")
-        return False
-    if get_board_col(y).count(unit) > 1:
-        print("fout col")
-        return False
-    return True
+    def get_board_block(self, x, y):
+        block_list = []
+        x = math.floor(x/3)
+        y = math.floor(y/3)
+        for x1 in range(x*3, (x+1)*3):
+            for y1 in range(y*3, (y+1)*3):
+                block_list.append(self.b[x1][y1])
+        return block_list
+
+    def is_cell_correct(self, x, y):
+        unit = self.b[x][y]
+        if self.get_board_block(x, y).count(unit) > 1:
+            print("fout block")
+            return False
+        if self.get_board_row(x).count(unit) > 1:
+            print("fout row")
+            return False
+        if self.get_board_col(y).count(unit) > 1:
+            print("fout col")
+            return False
+        return True
 
 def draw_visual_board():
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
@@ -84,7 +88,7 @@ def draw_numbers(surf):
     for i in range(9):
         for j in range(9):
             color = "black"
-            if not is_cell_correct(i,j): #TODO: mark only new cell if wrong
+            if not b.is_cell_correct(i,j): #TODO: mark only new cell if wrong
                 color = "red"
             font_surface = font.render(str(board3x3_solved[i][j]), True, color)
             font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
@@ -116,10 +120,19 @@ def modify_number(number):
     row = board3x3_solved[pos2]
     row[pos1] = int(number)
 
+
+
+
+
+
+
+
 pg.init()
 
 screen = pg.display.set_mode((1280*1.5,720*1.5))
 running = True
+
+b = Board(board3x3_solved)
 
 while running:
     for event in pg.event.get():
