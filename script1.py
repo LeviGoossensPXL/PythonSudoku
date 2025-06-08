@@ -114,7 +114,7 @@ class VisualBoard:
                 color = "black"
                 if not self.lb.is_cell_correct(i, j):  # TODO: mark only new cell if wrong
                     color = "red"
-                if board3x3_solved[i][j] == 0:
+                if self.lb.b[i][j] == 0:
                     continue
                 font_surface = font.render(str(self.lb.b[i][j]), True, color)
                 font_rect = font_surface.get_rect(
