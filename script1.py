@@ -4,28 +4,44 @@ import pygame as pg
 
 CELL_SIZE = 40
 
-board = [[6, 8, 2, 4, 3, 5, 1, 7, 9], # < x // 0
-         [7, 1, 5, 2, 9, 6, 3, 8, 4], # < x // 1
-         [9, 4, 3, 8, 7, 1, 6, 2, 5],
+board3x3_solved = [[6, 8, 2, 4, 3, 5, 1, 7, 9],  # < x // 0
+                   [7, 1, 5, 2, 9, 6, 3, 8, 4],  # < x // 1
+                   [9, 4, 3, 8, 7, 1, 6, 2, 5],
 
-         [2, 7, 1, 6, 8, 9, 5, 4, 3],
-         [4, 6, 9, 3, 5, 7, 8, 1, 2],
-         [5, 3, 8, 1, 4, 2, 9, 6, 7],
+                   [2, 7, 1, 6, 8, 9, 5, 4, 3],
+                   [4, 6, 9, 3, 5, 7, 8, 1, 2],
+                   [5, 3, 8, 1, 4, 2, 9, 6, 7],
 
-         [8, 2, 7, 9, 6, 3, 4, 5, 1],
-         [3, 5, 4, 7, 1, 8, 2, 9, 6],
-         [1, 9, 6, 5, 2, 4, 7, 3, 8]]
-         #^  ^
-         #y  y
-         #// //
-         #0  1
+                   [8, 2, 7, 9, 6, 3, 4, 5, 1],
+                   [3, 5, 4, 7, 1, 8, 2, 9, 6],
+                   [1, 9, 6, 5, 2, 4, 7, 3, 8]]
+                   #^  ^
+                   #y  y
+                   #// //
+                   #0  1
+
+board3x3_unsolved = [[0, 8, 2, 4, 3, 5, 1, 7, 9],  # < x // 0
+                     [0, 1, 5, 2, 9, 6, 3, 8, 4],  # < x // 1
+                     [9, 4, 3, 8, 7, 1, 6, 2, 5],
+
+                     [2, 7, 1, 6, 8, 9, 5, 4, 3],
+                     [4, 6, 9, 3, 5, 7, 8, 1, 2],
+                     [0, 3, 8, 1, 4, 2, 9, 6, 7],
+
+                     [8, 2, 7, 0, 0, 3, 0, 0, 1],
+                     [3, 5, 4, 0, 1, 0, 2, 9, 0],
+                     [0, 9, 6, 0, 2, 4, 7, 0, 0]]
+                     #^  ^
+                     #y  y
+                     #// //
+                     #0  1
 
 def get_board_row(x):
-    return board[x]
+    return board3x3_solved[x]
 
 def get_board_col(y):
     col_list = []
-    for row in board:
+    for row in board3x3_solved:
         col_list.append(row[y])
     return col_list
 
@@ -35,11 +51,11 @@ def get_board_block(x, y):
     y = math.floor(y/3)
     for x1 in range(x*3, (x+1)*3):
         for y1 in range(y*3, (y+1)*3):
-            block_list.append(board[x1][y1])
+            block_list.append(board3x3_solved[x1][y1])
     return block_list
 
 def is_cell_correct(x, y):
-    unit = board[x][y]
+    unit = board3x3_solved[x][y]
     if get_board_block(x, y).count(unit) > 1:
         print("fout block")
         return False
@@ -70,7 +86,7 @@ def draw_numbers(surf):
             color = "black"
             if not is_cell_correct(i,j): #TODO: mark only new cell if wrong
                 color = "red"
-            font_surface = font.render(str(board[i][j]), True, color)
+            font_surface = font.render(str(board3x3_solved[i][j]), True, color)
             font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
     print("XX")
@@ -97,7 +113,7 @@ def modify_number(number):
     pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
     if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
         return
-    row = board[pos2]
+    row = board3x3_solved[pos2]
     row[pos1] = int(number)
 
 pg.init()
