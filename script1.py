@@ -36,7 +36,7 @@ board3x3_unsolved = [[0, 8, 2, 4, 3, 5, 1, 7, 9],  # < x // 0
                      #// //
                      #0  1
 
-class Board:
+class LogicBoard:
     def __init__(self, board: list[list[int]]):
         self.b = board
 
@@ -80,6 +80,10 @@ class Board:
         row = self.b[pos2]
         row[pos1] = int(number)
 
+class VisualBoard:
+    def __init__(self, logic_board: LogicBoard):
+        self.lb = logic_board
+
 def draw_visual_board():
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
     surface.fill("white")
@@ -97,7 +101,7 @@ def draw_numbers(surf):
     for i in range(9):
         for j in range(9):
             color = "black"
-            if not b.is_cell_correct(i,j): #TODO: mark only new cell if wrong
+            if not lb.is_cell_correct(i,j): #TODO: mark only new cell if wrong
                 color = "red"
             if board3x3_solved[i][j] == 0:
                 continue
@@ -135,7 +139,8 @@ pg.init()
 screen = pg.display.set_mode((1280*1.5,720*1.5))
 running = True
 
-b = Board(board3x3_solved)
+lb = LogicBoard(board3x3_solved)
+vb = VisualBoard(lb)
 
 while running:
     for event in pg.event.get():
@@ -147,7 +152,7 @@ while running:
                     pos = pg.mouse.get_pos()
                     pos1 = math.floor((pos[0] - 50) / CELL_SIZE)
                     pos2 = math.floor((pos[1] - 50) / CELL_SIZE)
-                    b.modify_number(event.unicode, pos1, pos2)
+                    lb.modify_number(event.unicode, pos1, pos2)
             except:
                 pass
 
