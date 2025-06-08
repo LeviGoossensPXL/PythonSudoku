@@ -40,6 +40,8 @@ class LogicBoard:
     """class for managing the logic, data and implementation of the sudoku board"""
     def __init__(self, board: list[list[int]]):
         self.b = board
+        self.block_length = 3
+        self.row_and_col_length = math.pow(self.block_length, 2)
 
     def get_board_row(self, x):
         """function for getting a row at x coordinate"""
@@ -55,10 +57,10 @@ class LogicBoard:
     def get_board_block(self, x, y):
         """function for getting a block around x and y coordinates"""
         block_list = []
-        x = math.floor(x/3)
-        y = math.floor(y/3)
-        for x1 in range(x*3, (x+1)*3):
-            for y1 in range(y*3, (y+1)*3):
+        x = math.floor(x/self.block_length)
+        y = math.floor(y/self.block_length)
+        for x1 in range(x*self.block_length, (x+1)*self.block_length):
+            for y1 in range(y*self.block_length, (y+1)*self.block_length):
                 block_list.append(self.b[x1][y1])
         return block_list
 
@@ -81,7 +83,7 @@ class LogicBoard:
 
     def modify_number(self, number, pos1, pos2):
         """function for modifying number at x and y coordinate"""
-        if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+        if not (0 <= pos1 < self.row_and_col_length and 0 <= pos2 < self.row_and_col_length):
             return
         row = self.b[pos2]
         row[pos1] = int(number)
@@ -107,7 +109,7 @@ class VisualBoard:
 
     def draw_numbers(self, surf):
         """function for drawing the numbers on the board"""
-        font = pg.font.SysFont("ubuntu", 40)
+        font = pg.font.SysFont("ubuntu", 35)
         print("XX")
         for i in range(9):
             for j in range(9):
