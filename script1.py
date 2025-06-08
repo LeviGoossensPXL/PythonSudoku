@@ -31,8 +31,8 @@ def draw_numbers(surf):
     font = pg.font.SysFont("ubuntu", 40)
     for i in range(9):
         for j in range(9):
-            font_surface = font.render("9", True, "black")
-            font_rect = font_surface.get_rect(center=((CELL_SIZE * i) + (CELL_SIZE / 2), (CELL_SIZE * j) + (CELL_SIZE / 2)))
+            font_surface = font.render(str(board[i][j]), True, "black")
+            font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
     return surf
 
