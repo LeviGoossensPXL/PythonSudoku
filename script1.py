@@ -4,6 +4,18 @@ import pygame as pg
 
 CELL_SIZE = 40
 
+board = [[9, 9, 9, 9, 9, 9, 9, 9, 9],
+         [9, 4, 9, 9, 9, 9, 9, 9, 9],
+         [9, 9, 9, 9, 9, 9, 9, 9, 9],
+
+         [9, 5, 9, 9, 9, 9, 9, 9, 9],
+         [9, 9, 9, 9, 9, 9, 9, 9, 9],
+         [9, 9, 9, 9, 9, 9, 9, 9, 9],
+
+         [9, 9, 9, 9, 9, 9, 9, 9, 9],
+         [9, 9, 9, 9, 9, 9, 9, 9, 9],
+         [9, 9, 9, 9, 9, 9, 9, 9, 9]]
+
 def draw_visual_board():
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
     surface.fill("white")
@@ -39,6 +51,14 @@ def draw_selection(surf):
     pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
     surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
+def modify_number(number):
+    pos = pg.mouse.get_pos()
+    pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
+    pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
+    if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+        return
+    row = board[pos2]
+    row[pos1] = int(number)
 
 pg.init()
 
@@ -50,9 +70,11 @@ while running:
         if event.type == pg.QUIT:
             running = False
         if event.type == pg.KEYDOWN:
-            if 1 <= int(event.unicode) <= 9:
-                print(event.unicode)
-                pos = pg.mouse.get_pos()
+            try:
+                if 1 <= int(event.unicode) <= 9:
+                    modify_number(event.unicode)
+            except:
+                pass
 
     screen.fill("white")
     surf1 = draw_visual_board()
