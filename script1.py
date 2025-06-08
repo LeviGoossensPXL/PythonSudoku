@@ -90,6 +90,8 @@ def draw_numbers(surf):
             color = "black"
             if not b.is_cell_correct(i,j): #TODO: mark only new cell if wrong
                 color = "red"
+            if board3x3_solved[i][j] == 0:
+                continue
             font_surface = font.render(str(board3x3_solved[i][j]), True, color)
             font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
