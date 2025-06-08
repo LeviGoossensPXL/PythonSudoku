@@ -37,19 +37,23 @@ board3x3_unsolved = [[0, 8, 2, 4, 3, 5, 1, 7, 9],  # < x // 0
                      #0  1
 
 class LogicBoard:
+    """class for managing the logic, data and implementation of the sudoku board"""
     def __init__(self, board: list[list[int]]):
         self.b = board
 
     def get_board_row(self, x):
+        """function for getting a row at x coordinate"""
         return self.b[x]
 
     def get_board_col(self, y):
+        """function for getting a column at y coordinate"""
         col_list = []
         for row in self.b:
             col_list.append(row[y])
         return col_list
 
     def get_board_block(self, x, y):
+        """function for getting a block around x and y coordinates"""
         block_list = []
         x = math.floor(x/3)
         y = math.floor(y/3)
@@ -59,6 +63,7 @@ class LogicBoard:
         return block_list
 
     def is_cell_correct(self, x, y):
+        """function for checking if cell at x and y coordinates is correct"""
         unit = self.b[x][y]
         if unit == 0:
             print("cell is zero (empty)")
@@ -75,16 +80,19 @@ class LogicBoard:
         return True
 
     def modify_number(self, number, pos1, pos2):
+        """function for modifying number at x and y coordinate"""
         if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
             return
         row = self.b[pos2]
         row[pos1] = int(number)
 
 class VisualBoard:
+    """class for managing the visual representation of the logic board"""
     def __init__(self, logic_board: LogicBoard):
         self.lb = logic_board
 
 def draw_visual_board():
+    """function for drawing visual lines of the board"""
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
     surface.fill("white")
     for i in range(10):
@@ -96,6 +104,7 @@ def draw_visual_board():
     return surface
 
 def draw_numbers(surf):
+    """function for drawing the numbers on the board"""
     font = pg.font.SysFont("ubuntu", 40)
     print("XX")
     for i in range(9):
@@ -112,6 +121,7 @@ def draw_numbers(surf):
     return surf
 
 def draw_selection(surf):
+    """function for drawing the selected row and column"""
     pos = pg.mouse.get_pos()
     pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
     pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
