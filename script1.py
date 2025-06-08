@@ -67,8 +67,10 @@ def draw_numbers(surf):
     print("XX")
     for i in range(9):
         for j in range(9):
-            is_cell_correct(i,j)
-            font_surface = font.render(str(board[i][j]), True, "black")
+            color = "black"
+            if not is_cell_correct(i,j): #TODO: mark only new cell if wrong
+                color = "red"
+            font_surface = font.render(str(board[i][j]), True, color)
             font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
             surf.blit(font_surface, font_rect)
     print("XX")
