@@ -74,6 +74,12 @@ class Board:
             return False
         return True
 
+    def modify_number(self, number, pos1, pos2):
+        if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+            return
+        row = self.b[pos2]
+        row[pos1] = int(number)
+
 def draw_visual_board():
     surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
     surface.fill("white")
@@ -116,14 +122,6 @@ def draw_selection(surf):
     pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
     surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
-def modify_number(number):
-    pos = pg.mouse.get_pos()
-    pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
-    pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
-    if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
-        return
-    row = board3x3_solved[pos2]
-    row[pos1] = int(number)
 
 
 
@@ -146,7 +144,10 @@ while running:
         if event.type == pg.KEYDOWN:
             try:
                 if 1 <= int(event.unicode) <= 9:
-                    modify_number(event.unicode)
+                    pos = pg.mouse.get_pos()
+                    pos1 = math.floor((pos[0] - 50) / CELL_SIZE)
+                    pos2 = math.floor((pos[1] - 50) / CELL_SIZE)
+                    b.modify_number(event.unicode, pos1, pos2)
             except:
                 pass
 
