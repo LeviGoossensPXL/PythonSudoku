@@ -40,8 +40,15 @@ class LogicBoard:
     """class for managing the logic, data and implementation of the sudoku board"""
     def __init__(self, board: list[list[int]]):
         self.b = board
-        self.block_length = 3
-        self.row_and_col_length = math.pow(self.block_length, 2)
+        self._block_length = 3
+
+    @property
+    def block_length(self):
+        return self._block_length
+
+    @property
+    def row_and_col_length(self):
+        return int(math.pow(self._block_length, 2))
 
     def get_board_row(self, x):
         """function for getting a row at x coordinate"""
@@ -57,10 +64,10 @@ class LogicBoard:
     def get_board_block(self, x, y):
         """function for getting a block around x and y coordinates"""
         block_list = []
-        x = math.floor(x/self.block_length)
-        y = math.floor(y/self.block_length)
-        for x1 in range(x*self.block_length, (x+1)*self.block_length):
-            for y1 in range(y*self.block_length, (y+1)*self.block_length):
+        x = math.floor(x / self.block_length)
+        y = math.floor(y / self.block_length)
+        for x1 in range(x*self.block_length, (x + 1) * self.block_length):
+            for y1 in range(y*self.block_length, (y + 1) * self.block_length):
                 block_list.append(self.b[x1][y1])
         return block_list
 
@@ -95,15 +102,15 @@ class VisualBoard:
 
     def draw_visual_board(self):
         """function for drawing visual lines of the board"""
-        surface = pg.Surface(((CELL_SIZE * 9) + 3, (CELL_SIZE * 9) + 3))
+        surface = pg.Surface(((CELL_SIZE * self.lb.row_and_col_length) + 3, (CELL_SIZE * self.lb.row_and_col_length) + 3))
         surface.fill("white")
-        for i in range(10):
+        for i in range(self.lb.row_and_col_length+1):
             width = 1
-            if i % 3 == 0:
+            if i % self.lb.block_length == 0:
                 width = 3
-            pg.draw.line(surface, "black", (0, (CELL_SIZE * i) + 1.5), ((CELL_SIZE * 9) + 2, (CELL_SIZE * i) + 1.5),
+            pg.draw.line(surface, "black", (0, (CELL_SIZE * i) + 1.5), ((CELL_SIZE * self.lb.row_and_col_length) + 2, (CELL_SIZE * i) + 1.5),
                          width)
-            pg.draw.line(surface, "black", ((CELL_SIZE * i) + 1.5, 0), ((CELL_SIZE * i) + 1.5, (CELL_SIZE * 9) + 2),
+            pg.draw.line(surface, "black", ((CELL_SIZE * i) + 1.5, 0), ((CELL_SIZE * i) + 1.5, (CELL_SIZE * self.lb.row_and_col_length) + 2),
                          width)
         return surface
 
@@ -111,16 +118,15 @@ class VisualBoard:
         """function for drawing the numbers on the board"""
         font = pg.font.SysFont("ubuntu", 35)
         print("XX")
-        for i in range(9):
-            for j in range(9):
+        for i in range(self.lb.row_and_col_length):
+            for j in range(self.lb.row_and_col_length):
                 color = "black"
                 if not self.lb.is_cell_correct(i, j):  # TODO: mark only new cell if wrong
                     color = "red"
                 if self.lb.b[i][j] == 0:
                     continue
                 font_surface = font.render(str(self.lb.b[i][j]), True, color)
-                font_rect = font_surface.get_rect(
-                    center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
+                font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
                 surf.blit(font_surface, font_rect)
         print("XX")
         return surf
@@ -131,13 +137,13 @@ class VisualBoard:
         pos1 = math.floor((pos[0] - 50)/CELL_SIZE)
         pos2 = math.floor((pos[1] - 50)/CELL_SIZE)
 
-        if not (0 <= pos1 < 9 and 0 <= pos2 < 9):
+        if not (0 <= pos1 < self.lb.row_and_col_length and 0 <= pos2 < self.lb.row_and_col_length):
             return
-        shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*9), pg.SRCALPHA)
+        shape_surf = pg.Surface((CELL_SIZE, CELL_SIZE*self.lb.row_and_col_length), pg.SRCALPHA)
         pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
         surf.blit(shape_surf, (CELL_SIZE*pos1, 0))
 
-        shape_surf = pg.Surface((CELL_SIZE*9, CELL_SIZE), pg.SRCALPHA)
+        shape_surf = pg.Surface((CELL_SIZE*self.lb.row_and_col_length, CELL_SIZE), pg.SRCALPHA)
         pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
         surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
