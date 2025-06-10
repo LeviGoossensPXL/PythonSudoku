@@ -1,4 +1,6 @@
 import math
+import random
+import time
 
 import pygame as pg
 
@@ -31,6 +33,22 @@ board3x3_unsolved = [[0, 8, 0, 0, 0, 5, 1, 7, 9],  # < x // 0
                      [8, 0, 0, 0, 0, 3, 0, 0, 1],
                      [3, 5, 4, 0, 1, 0, 0, 9, 0],
                      [0, 9, 6, 0, 2, 4, 7, 0, 0]]
+                     #^  ^
+                     #y  y
+                     #// //
+                     #0  1
+
+board3x3_unsolved1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0],  # < x // 0
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],  # < x // 1
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0]]
                      #^  ^
                      #y  y
                      #// //
@@ -158,9 +176,28 @@ class VisualBoard:
         pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
         surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
-def dd():
+def algo1(board_su: LogicBoard):
+    """solve sudoku brute force at random
+     plus: /
+     negative: changes original sudoku if algorithm makes any mistakes, gets stuck sometimes mostly when starting from empty, no method or memory for solving"""
+    for cell in board_su.get_all_mistakes():
+        board_su.modify_number(0, cell[1], cell[0])
 
-    pass
+    for i in range(board_su.row_and_col_length):
+        for j in range(board_su.row_and_col_length):
+            if board_su.b[i][j] == 0:
+                wrong_list = set()
+                correct = False
+                while not correct:
+                    r = random.randint(1, 9)
+                    board_su.b[i][j] = r
+                    if len(board_su.get_all_mistakes()) == 0:
+                        correct = True
+                    else:
+                        wrong_list.add(r)
+                    if len(wrong_list) == 9:
+                        break
+                return # for visible algorithm
 
 
 pg.init()
@@ -168,7 +205,7 @@ pg.init()
 screen = pg.display.set_mode((1280*1.5,720*1.5))
 running = True
 
-lb = LogicBoard(board3x3_unsolved)
+lb = LogicBoard(board3x3_unsolved.copy())
 vb = VisualBoard(lb)
 
 while running:
@@ -189,8 +226,11 @@ while running:
     surf1 = vb.draw_visual_board()
     vb.draw_numbers(surf1)
     vb.draw_selection(surf1)
+    algo1(lb)
+    # time.sleep(0.5)
     print(lb.get_all_mistakes())
-
+    # for cell in lb.get_all_mistakes(): #allows self healing when user messes sudoku up again after it is solved
+    #     lb.modify_number(0, cell[1], cell[0])
 
 
     screen.blit(surf1, (50, 50))
