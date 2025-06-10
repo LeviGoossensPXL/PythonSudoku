@@ -71,22 +71,33 @@ class LogicBoard:
                 block_list.append(self.b[x1][y1])
         return block_list
 
-    def is_cell_correct(self, x, y):
+    def is_cell_correct(self, x, y, check_if_emtpy=False):
         """function for checking if cell at x and y coordinates is correct"""
         unit = self.b[x][y]
-        if unit == 0:
-            print("cell is zero (empty)")
-            return False
+        if unit == 0: # TODO: move or refactor for more easier to read code
+            if not check_if_emtpy:
+                return True
+            else:
+                # print("cell is zero (empty)")
+                return False
         if self.get_board_block(x, y).count(unit) > 1:
-            print("fout block")
+            # print("fout block")
             return False
         if self.get_board_row(x).count(unit) > 1:
-            print("fout row")
+            # print("fout row")
             return False
         if self.get_board_col(y).count(unit) > 1:
-            print("fout col")
+            # print("fout col")
             return False
         return True
+
+    def get_all_mistakes(self):
+        mistake_list = []
+        for i in range(self.row_and_col_length):
+            for j in range(self.row_and_col_length):
+                if not self.is_cell_correct(i, j):
+                    mistake_list.append((i, j))
+        return mistake_list
 
     def modify_number(self, number, pos1, pos2):
         """function for modifying number at x and y coordinate"""
@@ -117,7 +128,7 @@ class VisualBoard:
     def draw_numbers(self, surf):
         """function for drawing the numbers on the board"""
         font = pg.font.SysFont("ubuntu", 35)
-        print("XX")
+        # print("XX")
         for i in range(self.lb.row_and_col_length):
             for j in range(self.lb.row_and_col_length):
                 color = "black"
@@ -128,7 +139,7 @@ class VisualBoard:
                 font_surface = font.render(str(self.lb.b[i][j]), True, color)
                 font_rect = font_surface.get_rect(center=((CELL_SIZE * j) + (CELL_SIZE / 2), (CELL_SIZE * i) + (CELL_SIZE / 2)))
                 surf.blit(font_surface, font_rect)
-        print("XX")
+        # print("XX")
         return surf
 
     def draw_selection(self, surf):
@@ -147,12 +158,9 @@ class VisualBoard:
         pg.draw.rect(shape_surf, (0, 0, 255, 127), shape_surf.get_rect())
         surf.blit(shape_surf, (0, CELL_SIZE*pos2))
 
+def dd():
 
-
-
-
-
-
+    pass
 
 
 pg.init()
@@ -160,7 +168,7 @@ pg.init()
 screen = pg.display.set_mode((1280*1.5,720*1.5))
 running = True
 
-lb = LogicBoard(board3x3_solved)
+lb = LogicBoard(board3x3_unsolved)
 vb = VisualBoard(lb)
 
 while running:
@@ -181,6 +189,7 @@ while running:
     surf1 = vb.draw_visual_board()
     vb.draw_numbers(surf1)
     vb.draw_selection(surf1)
+    print(lb.get_all_mistakes())
 
 
 
