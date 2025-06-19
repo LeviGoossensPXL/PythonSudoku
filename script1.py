@@ -81,6 +81,23 @@ def algo1(board_su: LogicBoard):
                         break
                 return # for visible algorithm
 
+def algo2(board_su: LogicBoard):
+    #use while loop because the pointer to the sudoku grid moves froward and backward at random
+
+    # go list off
+    # if cell is empty:
+    # if solution(s) can be found for cell
+    # then pick a random solution for cell
+    # if solution is found for a cell
+    # then go back to previous solution of cell
+    # if previous cell has only 1 solution make it empty
+    # Do till you find a cell with minimum 2 solutions
+    # if cell has minimum 2 solutions
+    # then mark the one already in the cell as wrong and pick one of the others
+    # begin from this cell again
+    # find previous cell with min 2 solution
+
+    pass
 
 pg.init()
 
@@ -108,7 +125,7 @@ while running:
     surf1 = vb.draw_visual_board()
     vb.draw_numbers(surf1)
     vb.draw_selection(surf1)
-    algo1(lb)
+    # algo1(lb)
     # time.sleep(0.5)
     print(lb.get_all_mistakes())
     # for cell in lb.get_all_mistakes(): #allows self healing when user messes sudoku up again after it is solved
